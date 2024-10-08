@@ -30,11 +30,16 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $user->assignRole('Miembro');
+
+        $userArray = $user->toArray();
+        $userArray['roles'] = $user->getRoleNames();
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'message' => 'Usuario registrado exitosamente',
-            'user' => $user,
+            'user' => $userArray,
             'token' => $token
         ], 201);
     }
