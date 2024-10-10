@@ -35,19 +35,19 @@ export default function AdminLayout({ header, children }) {
                                     Inicio
                                 </NavLink>
 
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                <NavLink href={route('admin.adopciones')} active={route().current('admin.adopciones')}>
                                     Adopciones
                                 </NavLink>
 
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                <NavLink href={route('dashboard')} active={false}>
                                     Reportes
                                 </NavLink>
 
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                <NavLink href={route('dashboard')} active={false}>
                                     Organizaciones
                                 </NavLink>
 
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                <NavLink href={route('dashboard')} active={false}>
                                     Contacto
                                 </NavLink>
                             </div>

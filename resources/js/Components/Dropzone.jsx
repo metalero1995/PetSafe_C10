@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone'
 
 export default function Dropzone({ 
-    dragText = 'Suelta los archivos aquí...', 
+    dragText = 'Suelta las imagenes aquí...', 
     inputText = 'Arrastre y suelte algunos archivos aquí o haga clic para seleccionar archivos',
     setImage,
     images = [],

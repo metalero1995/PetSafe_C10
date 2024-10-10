@@ -1,15 +1,19 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
-export default function Modal(
-    { children, 
-      title,
-      description = null,
-      show = false, 
-      maxWidth = 'lg', 
-      closeable = true, 
-      onClose = () => {} 
-    }) {
+export default function ModalForm({ children, 
+    title,
+    description = null,
+    show = false, 
+    maxWidth = 'lg', 
+    closeable = true, 
+    onClose = () => {},
+    primaryAction,
+    secondaryAction,
+    primaryLabel,
+    secondaryLabel
+  }) {
+
     const close = () => {
         if (closeable) {
             onClose();
@@ -64,10 +68,25 @@ export default function Modal(
                                 className="mb-4 px-5 text-sm text-gray-600"
                             >{description}</Dialog.Description>
                         }
-                        {children}
+                        <div
+                            className="flex-1 overflow-y-auto"
+                        >{children}</div>
+                        <div
+                            className="p-5 flex justify-between"                        
+                        >
+                            <button
+                                className="py-2 px-4 text-white font-bold bg-red-600 rounded-md"
+                                onClick={secondaryAction}
+                            >{secondaryLabel}</button>
+                            <button
+                                className="py-2 px-4 text-white font-bold bg-green-600 rounded-md"
+                                onClick={primaryAction}
+                            >{primaryLabel}</button>
+                        </div>
                     </Dialog.Panel>
                 </Transition.Child>
             </Dialog>
         </Transition>
     );
-}
+};
+

@@ -15,7 +15,7 @@ class AdopcionController extends Controller
             ->where('adoptado', false)
             ->get();
 
-        return Inertia::render('AllPetsAvailable', [
+        return Inertia::render('Mascotas', [
             'mascotas' => $mascotas,
         ]);
     }
@@ -24,8 +24,8 @@ class AdopcionController extends Controller
         $mascota = Mascota::with(['imagenes', 'tipo', 'usuario'])
             ->find($id);
         
-        return view('adopciones.show', [
-            'mascota' => $mascota
+        return Inertia::render('Mascota', [
+            'mascota' => $mascota,
         ]);
     }
 

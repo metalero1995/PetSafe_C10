@@ -1,6 +1,8 @@
 import { Link } from "@inertiajs/react";
 import Carousel from "./Carousel";
 
+import { router } from "@inertiajs/react";
+
 export default function PetCard({ 
     mascota, 
     type = "public", 
@@ -9,27 +11,33 @@ export default function PetCard({
     publishFunction = () => {},
 })
 {
+
+    const onClick = () => {
+      //router.visit('/mascotas/'+mascota?.id);
+    }
+
     return (
-        <div className="flex flex-row bg-white rounded-lg overflow-hidden shadow-md">
+        <div 
+            className="flex flex-row bg-white rounded-lg overflow-hidden shadow-md"
+            onClick={onClick}
+        >
             <Carousel 
                 images={mascota.imagenes}
             />
-            <div className="flex flex-col w-1/2 p-4 gap-2">
-                <h5 className="text-2xl font-bold tracking-tight text-custom-brown">{mascota.tipo.nombre}</h5>
+            <div className="flex flex-col justify-between w-1/2 p-4">
+                <div className="flex flex-col gap-2">
+                    <h5 className="text-2xl font-bold tracking-tight text-custom-brown">{mascota.tipo.nombre}</h5>
 
-                <p className="text-custom-brown text-sm leading-relaxed">
-                    <strong>Edad:</strong> {mascota.edad} meses
-                </p>
-                <p className="text-custom-brown text-sm leading-relaxed">
-                    <strong>Peso:</strong> {mascota.peso} kg
-                </p>
-                <p className="text-custom-brown text-sm leading-relaxed">
-                    <strong>Sexo:</strong> {mascota.sexo}
-                </p>
-
-                <p className="text-custom-brown text-sm leading-relaxed">
-                    <strong>Descripción:</strong> {mascota.descripcion}
-                </p>
+                    <p className="text-custom-brown text-sm leading-relaxed">
+                        <strong>Edad:</strong> {mascota.edad} meses
+                    </p>
+                    <p className="text-custom-brown text-sm leading-relaxed">
+                        <strong>Peso:</strong> {mascota.peso} kg
+                    </p>
+                    <p className="text-custom-brown text-sm leading-relaxed">
+                        <strong>Sexo:</strong> {mascota.sexo}
+                    </p>
+                </div>
 
                 {type === "private" && (
                     <div className="flex gap-2">
@@ -63,9 +71,9 @@ export default function PetCard({
 
                 {type === "public" && (
                     <Link 
-                        href={`/app/directmessage/${mascota.id}`}
+                        href={`/mascotas/${mascota.id}`}
                         className="p-2 rounded-md bg-custom-gold text-white text-center text-sm"
-                    >Adoptame</Link>
+                    >Ver información</Link>
                 )}
 
             </div>

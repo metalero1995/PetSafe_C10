@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\User;
+use Laravel\Socialite\Facades\Socialite;
+
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,13 +31,13 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        if(auth()->user()->hasRole('Administrador')) {
+        /*if(auth()->user()->hasRole('Administrador')) {
             return redirect()->intended('/panel/admin');
         }
 
@@ -42,7 +45,12 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended('/panel/organizacion');
         }
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->intended(RouteServiceProvider::HOME);*/
+        $user = auth()->user();
+        $userArray = $user->toArray();
+        $userArray['roles'] = $user->getRoleNames();
+
+        return response()->json($userArray);
     }
 
     /**
@@ -57,5 +65,31 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function google() {
+        $googleUser = Socialite::driver('google')->stateless()->user();
+
+        $user = User::updateOrCreate(
+            ['email' => $googleUser->getEmail()],
+            [
+                'name' => $googleUser->getName(),
+                'password' => 'hola',
+                'photo' => $googleUser->getAvatar(),
+            ]
+        );
+
+        Auth::login($user);
+
+        $userAgent = request()->header('User-Agent');
+
+    // Patrón para detectar dispositivos móviles
+        $esMovil = preg_match('/mobile|android|iphone|ipad|ipod|windows phone/i', $userAgent);
+
+        if ($esMovil) {
+            return redirect()->intended();
+        } else {
+            return view('redirect'); 
+        }
     }
 }

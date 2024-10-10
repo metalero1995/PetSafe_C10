@@ -1,11 +1,9 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import AdminLayout from '@/Layouts/AdminLayout';
 import { Head } from '@inertiajs/react';
 
-export default function Dashboard({ auth }) {
+const Dashboard = ({ auth }) => {
     return (
-        <AuthenticatedLayout
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>}
-        >
+        <>
             <Head title="Dashboard" />
 
             <div className="py-12">
@@ -15,6 +13,15 @@ export default function Dashboard({ auth }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </>
     );
 }
+
+Dashboard.layout = page => (
+    <AdminLayout
+        children={page}
+        header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>}
+    />
+);
+
+export default Dashboard;

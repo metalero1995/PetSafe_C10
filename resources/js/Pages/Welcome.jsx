@@ -1,32 +1,16 @@
 import { Link, Head } from '@inertiajs/react';
 
-import LoginModal from '@/Components/LoginModal';
+import LoginModal from '@/Components/Modals/LoginModal';
+import Dropdown from '@/Components/Dropdown';
+import { useState } from 'react';
+import Guest from '@/Layouts/GuestLayout';
 
-export default function Welcome({ auth, mascotas, reportes }) {
-  console.log(mascotas);
+const Welcome = ({ auth, mascotas, reportes }) => {
+
   return (
     <>
-      <LoginModal open={false}/>
       <Head title="Welcome" />
-      {route().has('login') && (
-        <div className="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10 bg-custom-gold w-full">
-          {auth?.user ? (
-            <a href="" className="font-semibold text-custom-beige hover:text-gray-900 dark:text-custom-lightBeige dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Inicio</a>
-          ) : (
-            <>
-              <Link href="/login" className="font-semibold text-custom-lightBeige hover:text-gray-900 dark:text-custom-lightBeige dark:hover:text-gray-600 focus:outline focus:outline-2 focus:rounded-sm">Iniciar sesión</Link>
-              <Link href="/register" className="ml-4 font-semibold text-custom-lightBeige hover:text-gray-900 dark:text-custom-lightBeige dark:hover:text-gray-600 focus:outline focus:outline-2 focus:rounded-sm">Registrarse</Link>
-            </>
-          )
-        }
-        <Link href="/mascotas" className="ml-4 font-semibold text-custom-lightBeige hover:text-gray-900 dark:text-custom-lightBeige dark:hover:text-gray-600 focus:outline focus:outline-2 focus:rounded-sm">Adopciones</Link>
-        <a href="" className="ml-4 font-semibold text-custom-lightBeige hover:text-gray-900 dark:text-custom-lightBeige dark:hover:text-gray-600 focus:outline focus:outline-2 focus:rounded-sm">Dar en adopción</a>
-        <a href="" className="ml-4 font-semibold text-custom-lightBeige hover:text-gray-900 dark:text-custom-lightBeige dark:hover:text-gray-600 focus:outline focus:outline-2 focus:rounded-sm">Contacto</a>
-        <a href="" className="ml-4 font-semibold text-custom-lightBeige hover:text-gray-900 dark:text-custom-lightBeige dark:hover:text-gray-600 focus:outline focus:outline-2 focus:rounded-sm">Organizaciones</a>
-        </div>
-      )}
-
-      <div className="bg-white">
+      <div className="bg-white mt-10 md:mt-0">
         <div className="h-screen relative overflow-hidden bg-white">
             <div className="pb-80 pt-16 sm:pb-40 sm:pt-24 lg:pb-48 lg:pt-40">
                 <div className="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
@@ -209,3 +193,11 @@ export default function Welcome({ auth, mascotas, reportes }) {
     </>
   )
 }
+
+Welcome.layout = (page) => (
+    <Guest
+        children={page}
+    />
+);
+
+export default Welcome;

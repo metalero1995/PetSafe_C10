@@ -2,12 +2,12 @@
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrgDashboard;
 use Illuminate\Foundation\Application;
-use App\Http\Controllers\AdminDashboard;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdopcionController;
-use App\Http\Controllers\Admin\AdopcionController as AdminAdopcionController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,38 +31,20 @@ use App\Http\Controllers\Admin\AdopcionController as AdminAdopcionController;
 
 Route::get('/', [LandingController::class, 'index']);
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/panel/organizacion', [OrgDashboard::class, 'index'])->name('org.dashboard');
-
     Route::delete('/adopcion/eliminar/{id}', [AdopcionController::class, 'delete']);
-
-    Route::post('/adopcion/publicar', [AdopcionController::class, 'publish']);
-});
-
-Route::middleware('auth')->group(function() {
-    Route::get('/dar-adopcion', [AdopcionController::class, 'create'])->name('adopcion');
     Route::post('/dar-adopcion/store', [AdopcionController::class, 'store'])->name('adopcion.store');
     Route::get('/myadoptions', [AdopcionController::class, 'myadoptions']);
-
-    Route::get('/app/directmessage/{id}', [AdopcionController::class, 'directmessage']);
-});
-
-Route::middleware('auth')->group(function() {
-    Route::get('/panel/admin', [AdminDashboard::class, 'index'])->name('admin.dashboard');
-
-    Route::get('/panel/admin/adopciones', [AdminAdopcionController::class, 'index']);
-
-    Route::post('/panel/admin/adopciones/publicar', [AdminAdopcionController::class, 'publish']);
 });
 
 Route::get('/mascotas', [AdopcionController::class, 'index'])->name('mascotas.all');
+Route::get('/mascotas/{id}', [AdopcionController::class, 'show'])->name('mascotas.show');
 
 require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';

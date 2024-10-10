@@ -3,13 +3,14 @@ import { useState } from "react";
 import EditAdoptionModal from "@/Components/Modals/EditAdoptionModal";
 
 import PetCard from "@/Components/PetCard";
-import Authenticated from "@/Layouts/AuthenticatedLayout";
 
 import { Head } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 
 
 import Swal from 'sweetalert2'
 import axios from "axios";
+import Guest from "@/Layouts/GuestLayout";
 
 const MyAdoptions = ({ mascotas }) => {
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -35,6 +36,8 @@ const MyAdoptions = ({ mascotas }) => {
                         text: "La adopción ha sido eliminada.",
                         icon: "success"
                     });
+
+                    router.reload();
                 })
                 .catch(() => {
                     Swal.fire({
@@ -59,7 +62,10 @@ const MyAdoptions = ({ mascotas }) => {
             adoption={currentAdoption}
         />
 
-        <div className="p-12">
+        <div className="p-12 mt-10">
+            <p
+                className="text-xl font-bold text-gray-700 my-5"
+            >Mis mascotas</p>
             <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3">
                 {mascotas.map((mascota) => (
                     <PetCard
@@ -80,9 +86,8 @@ const MyAdoptions = ({ mascotas }) => {
 }
 
 MyAdoptions.layout = (page) => (
-    <Authenticated 
+    <Guest 
         children={page}
-        header={<h2 className="font-semibold text-xl text-custom-brown leading-tight">Mis Publicaciones de adopción</h2>}
     />
 );
 
