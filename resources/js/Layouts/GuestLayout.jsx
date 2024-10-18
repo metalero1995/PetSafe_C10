@@ -11,16 +11,18 @@ import RegisterModal from '@/Components/Modals/RegisterModal';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 
-import { ToastContainer } from 'react-toastify';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import toast, { Toaster } from 'react-hot-toast';
+
 import AdoptionFormModal from '@/Components/Modals/AdoptionFormModal';
+import ReporteFormModal from '@/Components/Modals/ReporteFormModal';
+import useAuth from '@/hooks/useAuth';
 
 export default function Guest({ children }) {
-    const [loginModal, setLoginModal] = useState(false);
-    const [registerModal, setRegisterModal] = useState(false);
+    
+    const { loginModal, registerModal, setLoginModal, setRegisterModal } = useAuth();
 
-    const [adopcionModal, setAdopcionModal] = useRemember(false)
+    const [adopcionModal, setAdopcionModal] = useRemember(false);
+    const [reporteModal, setReporteModal] = useRemember(false);
 
     const { auth  } = usePage().props;
 
@@ -51,7 +53,10 @@ export default function Guest({ children }) {
 
     return (
         <>
-            <ToastContainer/>
+            <Toaster
+                position="top-center"
+                reverseOrder={false}
+            />
             <AdoptionFormModal
                 open={adopcionModal && auth?.user ? true : false}
                 onClose={() => setAdopcionModal(false)}
@@ -72,6 +77,10 @@ export default function Guest({ children }) {
                     setRegisterModal(true);
                 }}
             />
+            <ReporteFormModal
+                open={reporteModal && auth?.user ? true : false}
+                onClose={() => setReporteModal(false)}
+            />
             <div className="fixed flex justify-between items-center top-0 right-0 px-6 py-2 text-right z-10 bg-white w-full">
                 <Link href="/">
                     <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
@@ -88,7 +97,7 @@ export default function Guest({ children }) {
                 <button 
                     type="button"
                     className="hidden md:block font-bold text-gray-700 border border-gray-400 p-2 rounded-full"
-                    onClick={() => {}}
+                    onClick={() => setReporteModal(true)}
                 >Reportar extravío</button>
                 <div className="hidden md:block">
                     <Dropdown>
@@ -153,6 +162,10 @@ export default function Guest({ children }) {
                                     <Dropdown.Link 
                                         href="/myadoptions"
                                     >Mis mascotas</Dropdown.Link>
+
+                                    <Dropdown.Link 
+                                        href="/chats"
+                                    >Mensajes</Dropdown.Link>
                                 </>
                             ) : (
                                 <>
@@ -280,7 +293,6 @@ export default function Guest({ children }) {
                     </Dropdown>
                 </div>
             </div>
-
         </>
     );
 }

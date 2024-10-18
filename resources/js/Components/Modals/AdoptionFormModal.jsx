@@ -14,7 +14,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import axios from "axios";
 
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
+
 import ModalForm from "../ModalForm";
 
 const schema = z.object({

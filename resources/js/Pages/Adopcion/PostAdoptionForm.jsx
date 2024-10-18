@@ -16,7 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import axios from "axios";
 
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const schema = z.object({
   imagenes: z.array(z.instanceof(File))

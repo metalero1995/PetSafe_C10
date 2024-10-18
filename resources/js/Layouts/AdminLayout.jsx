@@ -5,11 +5,9 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 
-import { ToastContainer } from 'react-toastify';
+import { Toaster } from 'react-hot-toast';
 
 import { usePage } from '@inertiajs/react';
-
-import 'react-toastify/dist/ReactToastify.css';
 
 export default function AdminLayout({ header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -18,7 +16,10 @@ export default function AdminLayout({ header, children }) {
 
     return (
         <>
-        <ToastContainer/>
+        <Toaster
+            position="top-center"
+            reverseOrder={false}
+        />
         <div className="min-h-screen bg-gray-100">
             <nav className="bg-white border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

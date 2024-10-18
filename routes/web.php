@@ -7,6 +7,7 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdopcionController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DashboardController;
 
 /*
@@ -41,6 +42,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/adopcion/eliminar/{id}', [AdopcionController::class, 'delete']);
     Route::post('/dar-adopcion/store', [AdopcionController::class, 'store'])->name('adopcion.store');
     Route::get('/myadoptions', [AdopcionController::class, 'myadoptions']);
+
+    Route::post('/send/message', [ChatController::class, 'store']);
+    Route::get('/chats', [ChatController::class, 'index']);
+    Route::get('/chats/{chat}', [ChatController::class, 'show']);
 });
 
 Route::get('/mascotas', [AdopcionController::class, 'index'])->name('mascotas.all');

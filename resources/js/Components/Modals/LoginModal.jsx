@@ -13,7 +13,7 @@ import axios from "axios";
 
 import { router } from '@inertiajs/react'
 
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
 
 
 const schema = z.object({

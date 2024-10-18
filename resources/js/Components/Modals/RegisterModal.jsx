@@ -12,7 +12,7 @@ import axios from "axios";
 
 import { router } from '@inertiajs/react'
 
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
 
 const schema = z.object({
     name: z.string().min(6, { message: 'El nombre debe tener al menos 6 caracteres' }).max(255, { message: "El nombre no puede tener más de 255 caracteres" }),
@@ -42,15 +42,13 @@ export default function RegisterModal({
             .then((response) => {
                 reset();
                 onClose();
-                if(response.data.roles[0] === "Organizacion" || response.data.roles[0] === "Administrador") {
-                    router.visit("/dashboard");
-                } else {
-                    router.reload();
-                    toast.success("Bienvenido");
-                }
+                
+                router.reload();
+                toast.success("Bienvenido");
             })
             .catch((e) => {
                 console.log(e);
+                toast.error("Ocurrió un error")
             });
     };
 

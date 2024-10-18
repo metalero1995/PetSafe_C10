@@ -3,7 +3,8 @@ import Dropzone from "@/Components/Dropzone";
 import Input from "@/Components/Form/Input";
 import TextArea from "@/Components/Form/TextArea";
 
-import Modal from "../Modal";
+import { router } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -14,7 +15,9 @@ import axios from "axios";
 
 import toast from 'react-hot-toast';
 
-import { useEffect } from "react";
+import ModalForm from "../ModalForm";
+
+import Map from "../Map";
 
 const schema = z.object({
     imagenes: z.array(z.instanceof(File))
@@ -35,14 +38,11 @@ const schema = z.object({
       edad: z.coerce.number().min(1, { message: 'La edad debe ser mayor a 0' }).max(100, { message: 'La edad máxima es 100 meses' }),
       peso: z.coerce.number().min(1, { message: 'El peso debe ser mayor que 0' }),
       descripcion: z.string().min(10, { message: 'La descripción debe tener al menos 10 caracteres' }).max(280, { message: 'La descripción no puede tener más de 280 caracteres' }),
-  });
+});
 
-export default function EditAdoptionModal({
-    open,
-    onClose,
-    adoption,
-})
-{
+export default function ReporteFormModal({ open, onClose }) {
+
+    const { url } = usePage();
 
     const {
         register,
@@ -54,34 +54,80 @@ export default function EditAdoptionModal({
     } = useForm({
         mode: "onChange",
         resolver: zodResolver(schema),
+        defaultValues: {
+            imagenes: [],
+            tipo: '1',
+            sexo: 'Macho'
+        }
     });
 
     const submitForm = async (data) => {
+
+        const formData = new FormData();
         
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+              const value = data[key];
+              
+              // Si el campo es un array de archivos (FileList), iteramos sobre él
+              if (value instanceof Array) {
+                for (let i = 0; i < value.length; i++) {
+                  formData.append(key + '[]', value[i]); // Añadimos archivos al FormData con el sufijo '[]'
+                }
+              } else {
+                // Para los campos normales, simplemente los añadimos al FormData
+                formData.append(key, value);
+              }
+            }
+        }
+
+        try {
+            const { data } = await axios.post("/dar-adopcion/store", formData); 
+            reset();
+            toast.success("Adopción registrada");
+            onClose();
+            if(url !== "/myadoptions") {
+                router.visit('/myadoptions');
+            } else {
+                router.reload();
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const images = watch('imagenes');
 
-    useEffect(() => {
-        console.log(adoption);
-        if(adoption) {
-            setValue('imagenes', adoption?.imagenes)
-        }
-    }, [adoption]);
+    const secondaryAction = () => {
+        reset();
+        onClose();
+        console.log("hola")
+    }
+
+    const primaryAction = () => {
+        handleSubmit(submitForm)();
+    }
 
     return (
-        <Modal 
-            title="Editar información de adopción"
+        <ModalForm
+            title="Reportar extravío"
             show={open}
-            closeable
             onClose={onClose}
+            closeable={false}
+            description="Completa la información de la mascota"
+            primaryAction={primaryAction}
+            secondaryAction={secondaryAction}
+            primaryLabel="Enviar"
+            secondaryLabel="Cancelar"
         >
-            <form className="space-y-6 px-5">
-                <div className="grid grid-cols-2 gap-4">
+            <form
+                className="px-5"
+            >
+                <div className="space-y-6 overflow-y-auto">
                     <Select
                         id="tipo"
                         className="mt-1 block w-full"
-                        label="Selecciona el tipo de tu mascota"
+                        label="Tipo de mascota"
                         onChange={(e) => setValue('tipo', e.target.value)}
                         required
                         autoComplete="tipo"
@@ -96,62 +142,25 @@ export default function EditAdoptionModal({
                         }]}
                     />
 
-                    <Select
-                        id="sexo"
-                        className="mt-1 block w-full"
-                        label="Selecciona el sexo de tu mascota"
-                        onChange={(e) => setValue('sexo', e.target.value)}
+                    <TextArea
+                        id="descripcion"
+                        label="Descripción"
                         required
-                        autoComplete="sexo"
-                        errors={errors["sexo"]}
-                        disabled={isSubmitting}
-                        options={[{
-                            id: 'Macho',
-                            nombre: "Macho"
-                        }, {
-                            id: 'Hembra',
-                            nombre: "Hembra"
-                        }]}
-                    />
-                                    
-                    <Input
-                        id="edad"
-                        label="Edad"
-                        required
-                        type="number"
-                        errors={errors["edad"]}
+                        type="text"
+                        errors={errors["descripcion"]}
                         disabled={isSubmitting}
                         register={register}
                     />
 
-                    <Input
-                        id="peso"
-                        label="Peso"
-                        required
-                        type="number"
-                        errors={errors["peso"]}
-                        disabled={isSubmitting}
-                        register={register}
+                    <Dropzone
+                        setImage={setValue}
+                        images={images}
+                        errors={errors["imagenes"]}
+                        isDisabled={isSubmitting}
+                        inputText="Presiona o arrastra imagenes de tu mascota (máximo 5 imágenes)"
                     />
                 </div>
-
-                <TextArea
-                    id="descripcion"
-                    label="Descripción"
-                    required
-                    type="text"
-                    errors={errors["descripcion"]}
-                    disabled={isSubmitting}
-                    register={register}
-                />
-
-                <Dropzone
-                    setImage={setValue}
-                    images={images}
-                    errors={errors["imagenes"]}
-                    isDisabled={isSubmitting}
-                />
             </form>
-        </Modal>
-    );
-};
+        </ModalForm>
+    )
+}
