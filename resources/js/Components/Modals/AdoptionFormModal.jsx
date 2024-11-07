@@ -17,6 +17,7 @@ import axios from "axios";
 import toast from 'react-hot-toast';
 
 import ModalForm from "../ModalForm";
+import { useCallback } from "react";
 
 const schema = z.object({
     imagenes: z.array(z.instanceof(File))
@@ -60,6 +61,8 @@ export default function AdoptionFormModal({ open, onClose }) {
         }
     });
 
+    const images = watch('imagenes');
+
     const submitForm = async (data) => {
 
         const formData = new FormData();
@@ -82,8 +85,8 @@ export default function AdoptionFormModal({ open, onClose }) {
 
         try {
             const { data } = await axios.post("/dar-adopcion/store", formData); 
-            reset();
             toast.success("Adopción registrada");
+            reset();
             onClose();
             if(url !== "/myadoptions") {
                 router.visit('/myadoptions');
@@ -95,17 +98,24 @@ export default function AdoptionFormModal({ open, onClose }) {
         }
     }
 
-    const images = watch('imagenes');
-
     const secondaryAction = () => {
         reset();
         onClose();
-        console.log("hola")
     }
 
     const primaryAction = () => {
         handleSubmit(submitForm)();
     }
+
+    const removeImage = (name) => {
+       const newFiles = [...images].filter((file) => file.name !== name);
+       setValue('imagenes', newFiles, { shouldValidate: true });
+    }
+
+    const uploadImages = useCallback((files) => {
+        const newFiles = [...images, ...files]
+        setValue('imagenes', newFiles, { shouldValidate: true })
+    }, [images])
 
     return (
         <ModalForm
@@ -128,11 +138,11 @@ export default function AdoptionFormModal({ open, onClose }) {
                             id="tipo"
                             className="mt-1 block w-full"
                             label="Tipo de mascota"
-                            onChange={(e) => setValue('tipo', e.target.value)}
                             required
                             autoComplete="tipo"
                             errors={errors["tipo"]}
                             disabled={isSubmitting}
+                            register={register}
                             options={[{
                                 id: '1',
                                 nombre: "Perro"
@@ -146,11 +156,11 @@ export default function AdoptionFormModal({ open, onClose }) {
                             id="sexo"
                             className="mt-1 block w-full"
                             label="Sexo de la mascota"
-                            onChange={(e) => setValue('sexo', e.target.value)}
                             required
                             autoComplete="sexo"
                             errors={errors["sexo"]}
                             disabled={isSubmitting}
+                            register={register}
                             options={[{
                                 id: 'Macho',
                                 nombre: "Macho"
@@ -192,7 +202,8 @@ export default function AdoptionFormModal({ open, onClose }) {
                     />
 
                     <Dropzone
-                        setImage={setValue}
+                        uploadImages={uploadImages}
+                        removeImage={removeImage}
                         images={images}
                         errors={errors["imagenes"]}
                         isDisabled={isSubmitting}

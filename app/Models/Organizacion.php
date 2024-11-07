@@ -17,5 +17,9 @@ class Organizacion extends Model
         'longitud',
         'telefono',
         'ubicacion',
+        'descripcion',
+        'photo',
+        'cover_photo',
+        'user_id',
     ];
 }

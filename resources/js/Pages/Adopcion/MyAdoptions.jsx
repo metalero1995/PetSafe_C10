@@ -16,6 +16,8 @@ const MyAdoptions = ({ mascotas }) => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [currentAdoption, setCurrentAdoption] = useState(null);
 
+  console.log(mascotas);
+
   const onDelete = (id) => {
     Swal.fire({
         title: "Eliminar mascota",

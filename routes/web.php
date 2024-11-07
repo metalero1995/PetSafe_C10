@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrgDashboard;
@@ -31,6 +32,10 @@ use App\Http\Controllers\DashboardController;
 });*/
 
 Route::get('/', [LandingController::class, 'index']);
+Route::get('/adopciones', [AdopcionController::class, 'index'])->name('mascotas.all');
+Route::get('/mascotas/{id}', [AdopcionController::class, 'show'])->name('mascotas.show');
+Route::get('/contactanos', [ContactController::class, 'create'])->name('contactanos');
+Route::post('/contactanos', [ContactController::class, 'store'])->name('contactanos.store');
 
 Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -41,15 +46,14 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/adopcion/eliminar/{id}', [AdopcionController::class, 'delete']);
     Route::post('/dar-adopcion/store', [AdopcionController::class, 'store'])->name('adopcion.store');
+    Route::patch('/dar-adopcion/update/{id}', [AdopcionController::class, 'update']);
     Route::get('/myadoptions', [AdopcionController::class, 'myadoptions']);
 
     Route::post('/send/message', [ChatController::class, 'store']);
     Route::get('/chats', [ChatController::class, 'index']);
-    Route::get('/chats/{chat}', [ChatController::class, 'show']);
+    Route::get('/chats/{id}', [ChatController::class, 'show']);
 });
-
-Route::get('/mascotas', [AdopcionController::class, 'index'])->name('mascotas.all');
-Route::get('/mascotas/{id}', [AdopcionController::class, 'show'])->name('mascotas.show');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
+require __DIR__.'/org.php';

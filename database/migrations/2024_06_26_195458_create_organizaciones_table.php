@@ -15,8 +15,13 @@ class CreateOrganizacionesTable extends Migration
             $table->decimal('longitud', 11, 8);
             $table->string('telefono', 20);
             $table->string('ubicacion');
+            $table->string('descripcion')->nullable();
+            $table->string('photo')->nullable();
+            $table->string('cover_photo')->nullable();
 
-            $table->foreignId('user_id');
+            $table->unsignedBigInteger('user_id');
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

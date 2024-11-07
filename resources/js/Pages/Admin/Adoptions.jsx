@@ -64,6 +64,11 @@ const Adoptions = ({ mascotas }) => {
     );
 };
 
-Adoptions.layout = (page) => <AdminLayout children={page}/>;
+Adoptions.layout = (page) => (
+    <AdminLayout 
+        children={page}
+        header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Adopciones</h2>}
+    />
+);
 
 export default Adoptions

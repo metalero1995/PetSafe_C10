@@ -44,11 +44,11 @@ export default function AdminLayout({ header, children }) {
                                     Reportes
                                 </NavLink>
 
-                                <NavLink href={route('dashboard')} active={false}>
+                                <NavLink href={route('org.index')} active={route().current('org.index')}>
                                     Organizaciones
                                 </NavLink>
 
-                                <NavLink href={route('dashboard')} active={false}>
+                                <NavLink href={route('contacts.index')} active={route().current('contacts.index')}>
                                     Contacto
                                 </NavLink>
                             </div>

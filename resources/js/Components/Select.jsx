@@ -1,5 +1,5 @@
 
-export default function Select({ options = [], label, className = '', id, errors, ...props })
+export default function Select({ options = [], label, className = '', id, required, errors, register,...props })
 {
     return (
         <div>
@@ -14,6 +14,7 @@ export default function Select({ options = [], label, className = '', id, errors
                     className
                 }
                 {...props}
+                {...register(id, { required })}
             >
                 {options.map((i) => (
                     <option 

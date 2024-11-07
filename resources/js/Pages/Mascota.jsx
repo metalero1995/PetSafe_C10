@@ -1,5 +1,5 @@
 import ChatInput from "@/Components/Form/ChatInput";
-import ImageCarousel from "@/Components/ImageCarousel";
+import Carousel from "@/Components/Carousel";
 import { LogInWithGoogle } from "@/Components/LogInWithGoogle";
 import useAuth from "@/hooks/useAuth";
 import Guest from "@/Layouts/GuestLayout";
@@ -43,7 +43,7 @@ const Mascota = ({ mascota }) => {
                     <div
                         className="w-2/3"
                     >
-                        <ImageCarousel
+                        <Carousel
                             images={mascota?.imagenes}
                         />
                         <div className="mt-8">

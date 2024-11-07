@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Contact;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Inertia;
 
 class ContactController extends Controller
 {
@@ -14,7 +15,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        return view('contact.create');
+        return Inertia::render('Contact');
     }
 
     /**
@@ -26,6 +27,7 @@ class ContactController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'telefono' => 'required|string|max:255',
             'subject' => 'required|string|max:255',
             'message' => 'required|string',
         ]);
@@ -36,12 +38,14 @@ class ContactController extends Controller
             'email' => $request->email,
             'subject' => $request->subject,
             'message' => $request->message,
+            'telefono' => $request->telefono,
         ]);
 
         // Datos del correo
         $data = [
             'name' => $request->input('name'),
             'email' => $request->input('email'),
+            'telefono' => $request->input('telefono'),
             'subject' => $request->input('subject'),
             'userMessage' => $request->input('message'), // Cambiado para evitar conflicto de nombre
         ];
@@ -52,6 +56,8 @@ class ContactController extends Controller
                     ->subject('Gracias por contactarnos-PetSafe');
         });
 
-        return redirect()->back()->with('success', 'Tu mensaje ha sido enviado con éxito. Intentaremos atenderte lo más pronto posible.');
+        return [
+            "mensaje" => "Tu mensaje ha sido enviado con éxito. Intentaremos atenderte lo más pronto posible.",
+        ];
     }
 }

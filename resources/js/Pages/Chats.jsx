@@ -24,7 +24,7 @@ const Chats = ({ chats }) => {
                 <p>No hay mensajes</p>
             ) : (
                 <div
-                  className="space-y-4"
+                
                 >
                   {chats?.map((chat) => (
                     <ChatItem

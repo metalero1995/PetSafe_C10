@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Publicacion;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -17,7 +18,15 @@ class DashboardController extends Controller
         }
 
         if(auth()->user()->hasRole('Organizacion')) {
-            return Inertia::render('Organizacion/Dashboard');
+            $posts = Publicacion::where('user_id', auth()->user()->id)
+                ->with([
+                    'imagenes:id,url,created_at,publicacion_id',
+                    'org:id,nombre_organizacion,photo',
+                ])
+                ->get();
+            return Inertia::render('Organizacion/Dashboard', [
+                'posts' => $posts,
+            ]);
         }
 
         return redirect()->back();

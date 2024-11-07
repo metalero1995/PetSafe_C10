@@ -29,7 +29,6 @@ export default function LoginModal({
 
     const {
         register,
-        setValue,
         reset,
         handleSubmit,
         formState: { errors, isSubmitting },
@@ -37,8 +36,6 @@ export default function LoginModal({
         mode: "onChange",
         resolver: zodResolver(schema),
     });
-
-    console.log(isSubmitting);
 
     const onLogin = (data) => {
         axios.post('/login', data)
@@ -54,6 +51,7 @@ export default function LoginModal({
             })
             .catch((e) => {
                 console.log(e);
+                toast.error("Ocurrió un error");
             });
     };
 
@@ -90,7 +88,7 @@ export default function LoginModal({
 
                 <button 
                     type="submit"
-                    className="w-full h-12 bg-custom-gold text-white text-center font-bold rounded-md"
+                    className="w-full h-12 bg-custom-gold text-white text-center font-bold rounded-md disabled:cursor-not-allowed"
                     disabled={isSubmitting}
                 >
                     Iniciar sesión

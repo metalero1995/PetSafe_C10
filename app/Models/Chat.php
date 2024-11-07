@@ -27,6 +27,9 @@ class Chat extends Model
             ])
             ->select("id", "mascota_id", "user_id", "owner_id")
             ->get()
+            ->sortByDesc(function ($chat) {
+                return $chat->ultimoMensaje->created_at;
+            })
             ->map(function ($chat) use ($userId) {
                 // Determinar el otro usuario dependiendo de quién sea el usuario autenticado
                 $otroUsuario = $chat->user_id == $userId ? $chat->owner : $chat->usuario;
@@ -45,7 +48,9 @@ class Chat extends Model
                 unset($chat->owner_id);
     
                 return $chat;
-            });
+            })
+            ->values() // Añadir este método para asegurar que la colección se convierte en un array indexado
+            ->toArray();
     }
 
     public function mascota()
@@ -65,7 +70,7 @@ class Chat extends Model
 
     public function mensajes()
     {
-        return $this->hasMany(Mensaje::class, 'chat_id');
+        return $this->hasMany(Mensaje::class, 'chat_id')->orderBy("created_at", "asc");
     }
 
     public function ultimoMensaje()

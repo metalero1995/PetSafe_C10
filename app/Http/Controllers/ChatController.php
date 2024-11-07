@@ -15,6 +15,7 @@ class ChatController extends Controller
     public function index()
     {
         $chats = Chat::obtenerChatsDeUsuario(auth()->user()->id);
+        //dd($chats);
         return Inertia::render("Chats", [
             "chats" => $chats,
         ]);
@@ -66,13 +67,43 @@ class ChatController extends Controller
         }
     }
 
-    public function show(Chat $chat)
+    public function show($id)
     {
-        return $chat->mensajes;
-        return Inertia::render("Chat", [
-            "mensaje" => $chat->mensajes,
-            "mascota" => $chat->mascota
-        ]);
+        $chat = Chat::with([
+            "mensajes:id,contenido,chat_id,user_id,created_at", 
+            "owner:id,name", 
+            "usuario:id,name", 
+            "mascota"
+        ])->find($id);
+        
+        if($chat) {
+            $userId = auth()->user()->id;
+
+            if($chat->owner_id === $userId || $chat->user_id === $userId) {
+
+                $otroUsuario = $chat->user_id == $userId ? $chat->owner : $chat->usuario;
+
+                $chat->unsetRelation('usuario');
+                $chat->unsetRelation('owner');
+                $chat->person = [
+                    "nombre" => $otroUsuario->name,
+                    "foto" => $otroUsuario->photo,
+                    "id" => $otroUsuario->id,
+                ];
+
+                unset($chat->user_id);
+                unset($chat->owner_id);
+
+                return Inertia::render("Chat", [
+                    "chat" => $chat,
+                ]);
+            } else {
+                return redirect()->back();
+            }
+        }
+
+        return redirect()->back();
+
     }
 
     public function destroy(Chat $chat)

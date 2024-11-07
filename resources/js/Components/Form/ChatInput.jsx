@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const ChatInput = ({ onSendMessage, disabled }) => {
   const [message, setMessage] = useState('');
+  const textareaRef = useRef(null);
 
   const handleSendMessage = async() => {
     if (message.trim() !== '') {
@@ -16,13 +17,23 @@ const ChatInput = ({ onSendMessage, disabled }) => {
     }
   };
 
+  useEffect(() => {
+    if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto'; // Restablecer la altura
+        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Ajustar altura
+    }
+  }, [message]);
+
   return (
     <div className="relative">
-      <input
-        className="flex h-10 w-full rounded-md bg-background pr-14 bg-zinc-200/90 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 disabled:cursor-not-allowed"
+      <textarea
+        className="flex h-10 w-full resize-none rounded-md bg-background pr-14 bg-zinc-200/90 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 disabled:cursor-not-allowed"
         disabled={disabled}
         onChange={(e) => setMessage(e.target.value)}
         value={message}
+        rows="1"
+        placeholder="Escribe tu mensaje..."
+        ref={textareaRef}
       />
       <button
         type="button"

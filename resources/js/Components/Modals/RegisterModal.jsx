@@ -28,7 +28,6 @@ export default function RegisterModal({
 
     const {
         register,
-        setValue,
         reset,
         handleSubmit,
         formState: { errors, isSubmitting },
@@ -95,7 +94,8 @@ export default function RegisterModal({
 
                 <button 
                     type="submit"
-                    className="w-full h-12 bg-custom-gold text-white text-center font-bold rounded-md"
+                    className="w-full h-12 bg-custom-gold text-white text-center font-bold rounded-md disabled:cursor-not-allowed"
+                    disabled={isSubmitting}
                 >
                     Registrarse
                 </button>

@@ -45,7 +45,7 @@ const ImageCarousel = ({ images }) => {
         {images.map((image, index) => (
           <div key={index} style={{ position: 'relative', paddingTop: '56.25%' }}>
             <img
-              src={"http://localhost:8000/"+image.url}
+              src={image.url}
               alt={`Slide ${index + 1}`}
               className="w-full h-72 object-fill rounded-md"
             />

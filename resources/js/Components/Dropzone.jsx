@@ -1,23 +1,19 @@
-import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone'
 
 export default function Dropzone({ 
     dragText = 'Suelta las imagenes aquí...', 
     inputText = 'Arrastre y suelte algunos archivos aquí o haga clic para seleccionar archivos',
-    setImage,
+    uploadImages,
+    removeImage,
     images = [],
     errors,
     isDisabled = false
 })
 {
 
-    const onDrop = useCallback((acceptedFiles) => {
-        const allImages = [...images, ...acceptedFiles]
-        setImage('imagenes', allImages, { shouldValidate: true });
-    }, [images]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
+        onDrop : uploadImages,
         accept: {
             'image/jpeg': ['.jpeg', '.jpg'],
             'image/png': ['.png'],
@@ -27,10 +23,6 @@ export default function Dropzone({
         disabled: images.length < 5 ? false : true || isDisabled,
     });
 
-    const removeImage = useCallback((name) => {
-       const newFiles = [...images].filter((file) => file.name !== name);
-       setImage('imagenes', newFiles, { shouldValidate: true });
-    }, [images])
 
     return (
         <>
@@ -64,7 +56,7 @@ export default function Dropzone({
                             type='button'
                             onClick={(e) => {
                                 e.stopPropagation();
-                                removeImage(image.name)
+                                removeImage(image?.name || image?.id)
                             }}
                             className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white p-1 rounded-full text-xs focus:outline-none hover:bg-red-600"
                         >
