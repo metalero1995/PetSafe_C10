@@ -44,7 +44,7 @@ class AdopcionController extends Controller
                 $nombre = $imagen->getClientOriginalName();
                 $nombreUnico = uniqid() . '_' . $nombre;
                 $imagen->storeAs('public/mascotas', $nombreUnico, );
-                $tempFilePath = 'storage/mascotas/' . $nombreUnico;
+                $tempFilePath = '/storage/mascotas/' . $nombreUnico;
 
                 ImagenMascota::create([
                     'url' => $tempFilePath,
@@ -56,6 +56,15 @@ class AdopcionController extends Controller
         return response([
             'mensaje' => 'Creado',
         ], 200);
+    }
+
+    public function myadoptions()
+    {
+        $mascotas = Mascota::with(['imagenes', 'tipo', 'usuario'])->where('user_id', auth()->user()->id)->get();
+
+        return [
+            'mascotas' => $mascotas,
+        ];
     }
 
     /**
@@ -76,7 +85,36 @@ class AdopcionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        //dd($request->all());
+        $mascota = Mascota::find($id);
+
+        if($mascota) {
+            $mascota->fill($request->only(['tipo_id', 'sexo', 'descripcion', 'peso', 'edad']))->save();
+        }
+
+        $deletedImages = $request->deletedImages;
+        if($deletedImages) {
+            ImagenMascota::destroy($deletedImages);
+        }
+
+        $imagenes = $request->file('imagenes');
+        if ($imagenes != null) {
+            foreach ($imagenes as $imagen) {
+                $nombre = $imagen->getClientOriginalName();
+                $nombreUnico = uniqid() . '_' . $nombre;
+                $imagen->storeAs('public/mascotas', $nombreUnico, );
+                $url = '/storage/mascotas/' . $nombreUnico;
+
+                ImagenMascota::create([
+                    'url' => $url,
+                    'mascota_id' => $mascota->id,
+                ]);
+            }
+        }
+
+        return [
+            "mensaje" => "Mascota actualizada correctamente",
+        ];
     }
 
     /**

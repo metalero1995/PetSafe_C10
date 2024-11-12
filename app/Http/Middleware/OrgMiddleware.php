@@ -17,9 +17,16 @@ class OrgMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::user();
+
         if(!$user->hasRole('Organizacion')) {
-            return redirect('/home');
-        }
+            if($request->expectsJson()) {
+                return response()->json([
+                    'error' => 'No tienes permiso para acceder a esta ruta.'
+                ], 403);
+            };
+            return redirect('/');
+        };
+
         return $next($request);
     }
 }

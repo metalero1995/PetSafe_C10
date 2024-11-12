@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\OrganizacionController;
 use App\Http\Controllers\Org\ProfileController;
 
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth', 'admin'])->group(function() {
 
     Route::get('/panel/admin/adopciones', [AdminAdopcionController::class, 'index'])->name('admin.adopciones');
 

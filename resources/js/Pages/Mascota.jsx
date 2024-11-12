@@ -45,6 +45,7 @@ const Mascota = ({ mascota }) => {
                     >
                         <Carousel
                             images={mascota?.imagenes}
+                            type="show"
                         />
                         <div className="mt-8">
                             <p

@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react';
 
-const Carousel = ({ images }) => {
+const classes = {
+  "preview": [
+    "w-1/2",
+    "h-72",
+  ],
+  "show": [
+    "max-w-4xl",
+    "h-96",
+  ],
+};
+
+const Carousel = ({ images, type = "preview" }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
@@ -53,7 +64,7 @@ const Carousel = ({ images }) => {
   };
 
   return (
-    <div className="relative max-w-4xl mx-auto group">
+    <div className={"relative mx-auto group " + classes[type][0]}>
       <div
         className="overflow-hidden"
         onTouchStart={handleTouchStart}
@@ -70,7 +81,7 @@ const Carousel = ({ images }) => {
                 key={image.url}
                 src={image.url}
                 alt="carousel"
-                className="w-full h-96 object-cover inline-block"
+                className={"w-full object-cover inline-block " + classes[type][1]}
                 draggable="false"
               />
             ))}

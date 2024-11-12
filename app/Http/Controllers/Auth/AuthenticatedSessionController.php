@@ -79,6 +79,10 @@ class AuthenticatedSessionController extends Controller
             ]
         );
 
+        if (!$user->hasRole('Miembro')) {
+            $user->assignRole('Miembro');
+        }
+
         Auth::login($user);
 
         $userAgent = request()->header('User-Agent');

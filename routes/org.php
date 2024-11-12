@@ -5,7 +5,7 @@ use App\Http\Controllers\Org\ProfileController;
 use App\Http\Controllers\Org\PublicacionController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth', 'org'])->group(function() {
     Route::get('/panel/org/profile', [ProfileController::class, 'edit'])->name('org.profile');
 
     Route::post('/org/post', [PublicacionController::class, 'store']);

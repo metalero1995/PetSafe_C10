@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Chat;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Mascota;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Notifications\ChatNotification;
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -20,10 +21,10 @@ class ChatController extends Controller
         $chats = Chat::obtenerChatsDeUsuario(auth()->user()->id);
         $notificaciones = auth()->user()->unreadNotifications;
         
-        return Inertia::render("Chats", [
+        return [
             "chats" => $chats,
             "notificaciones" => $notificaciones,
-        ]);
+        ];
     }
 
     public function store(Request $request)
@@ -134,23 +135,19 @@ class ChatController extends Controller
                     $notificacion->markAsRead();
                 };
 
-                return Inertia::render("Chat", [
+                return [
                     "chat" => $chat,
-                ]);
+                ];
             } else {
-                return redirect()->back();
+                return response([
+                    "mensaje" => "Acción no permitida",
+                ], 409);
             }
         }
 
-        return redirect()->back();
+        return response([
+            "mensaje" => "Acción no permitida",
+        ], 409);;
 
-    }
-
-    public function destroy(Chat $chat)
-    {
-        $chat->delete();
-        return [
-            "mensaje" => "Mensaje eliminado",
-        ];
     }
 }

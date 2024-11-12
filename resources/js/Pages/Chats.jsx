@@ -3,8 +3,8 @@ import Guest from '@/Layouts/GuestLayout'
 import { Head } from '@inertiajs/react';
 import React from 'react'
 
-const Chats = ({ chats }) => {
-  console.log(chats)
+const Chats = ({ chats, notificaciones, }) => {
+  
   return (
     <>
       <Head
@@ -30,6 +30,7 @@ const Chats = ({ chats }) => {
                     <ChatItem
                         key={chat?.id}
                         chat={chat}
+                        notRead={notificaciones?.some(notification => notification.data.chat_id === chat.id)}
                     />
                   ))}
                 </div>
