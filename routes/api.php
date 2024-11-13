@@ -29,11 +29,12 @@ Route::post('/contacto', [ContactoController::class, 'store']);
 Route::get('/orgs', [OrgController::class, 'index']);
 Route::get('/org', [OrgController::class], 'show');
 
+Route::get('/mascotas', [AdopcionController::class, 'index']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'me']);
 
-    Route::get('/mascotas', [AdopcionController::class, 'index']);
     Route::get('/mascotas/{id}', [AdopcionController::class, 'show']);
     Route::post('/mascotas', [AdopcionController::class, 'store']);
     Route::delete('/mascotas/{id}', [AdopcionController::class, 'destroy']);
