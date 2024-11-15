@@ -1,0 +1,1 @@
+import{j as o}from"./app-0e80d3ae.js";import{A as t}from"./AdminLayout-31fd9ad8.js";import"./Dropdown-3ade979b.js";import"./transition-a27f3241.js";import"./ResponsiveNavLink-42653e20.js";import"./index-4ac6d278.js";const i=()=>o.jsx("div",{children:"Hola Admin"});i.layout=r=>o.jsx(t,{children:r});export{i as default};
