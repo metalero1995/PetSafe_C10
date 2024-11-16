@@ -38,7 +38,7 @@ export default function LoginModal({
     });
 
     const onLogin = (data) => {
-        axios.post('/login', data)
+        axios.post('/login', data, { withCredentials: true, withXSRFToken: true })
             .then((response) => {
                 reset();
                 onClose();

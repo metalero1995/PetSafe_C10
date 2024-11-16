@@ -84,7 +84,7 @@ export default function AdoptionFormModal({ open, onClose }) {
         }
 
         try {
-            const { data } = await axios.post("/dar-adopcion/store", formData); 
+            const { data } = await axios.post("/dar-adopcion/store", formData, { withCredentials: true, withXSRFToken: true }); 
             toast.success("Adopción registrada");
             reset();
             onClose();

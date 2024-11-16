@@ -37,7 +37,7 @@ export default function RegisterModal({
     });
 
     const onRegister = (data) => {
-        axios.post('/register', data)
+        axios.post('/register', data, { withCredentials: true, withXSRFToken: true })
             .then((response) => {
                 reset();
                 onClose();
