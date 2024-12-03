@@ -15,7 +15,7 @@ const Welcome = ({ auth, mascotas, reportes }) => {
             <div className="pb-80 pt-16 sm:pb-40 sm:pt-24 lg:pb-48 lg:pt-40">
                 <div className="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
                     <div className="sm:max-w-lg">
-                        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">HOLA MUNDO</h1>
+                        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">HOLA MUNDO2</h1>
                         <p className="mt-4 text-xl text-gray-900">¿Quiénes somos?</p>
                         <p className="mt-4 text-justify text-gray-500">Somos un equipo comprometido del Municipio de Othón P. Blanco, integrado por profesionales apasionados por el bienestar animal y la mejora de nuestra comunidad. Nuestro proyecto, "PetSafe", nace del compromiso de enfrentar el creciente problema del abandono de mascotas en nuestra ciudad y, en un futuro, expandir su impacto en todo el estado de Quintana Roo.</p>
                         <p className="mt-4 text-xl text-gray-900">¿Qué queremos lograr?</p>
